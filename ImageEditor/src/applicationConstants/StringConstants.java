@@ -6,6 +6,7 @@ public class StringConstants {
 	
 	public static final String WINDOW_CLOSE_DIALOG = new String ( "Are you sure you want to exit?" );
 	
+	public static final String FILE_TITLE = new String ( "File" );
 	public static final String FILELOAD_TITLE = new String ( "Open file" );
 	public static final String FILESAVE_TITLE = new String ( "Save file" );
 	public static final String FILEEXIT_TITLE = new String ( "Exit" );

@@ -9,9 +9,9 @@ import utility.SystemInformationUtility;
 
 public class MainWindow {
 	
-	Stage stage;
-	Scene scene;
-	VBox rootNode;
+	private Stage stage;
+	private Scene scene;
+	private VBox rootNode;
 	
 	public MainWindow() {
 		
@@ -28,6 +28,7 @@ public class MainWindow {
 		
 		initializeWindowDimensions();
 		
+		rootNode.getChildren().add( new TopMenuBar() );
 	}
 	
 	private void initializeWindowDimensions() {
@@ -42,4 +43,5 @@ public class MainWindow {
 	public void show() {
 		stage.show();
 	}
+	
 }
