@@ -1,17 +1,23 @@
 package graphicalInterface;
 
+import java.io.File;
+
 import applicationConstants.StringConstants;
+import graphicalInterface.menus.fileMenu.fileDialog.FileExtensionFilterList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utility.SystemInformationUtility;
 
 public class MainWindow {
 	
-	private Stage stage;
-	private Scene scene;
-	private VBox rootNode;
+	private final Stage stage;
+	private final Scene scene;
+	private final VBox rootNode;
+	private final TabPane imageTabPane;
 	
 	public MainWindow() {
 		
@@ -28,7 +34,8 @@ public class MainWindow {
 		
 		initializeWindowDimensions();
 		
-		rootNode.getChildren().add( new TopMenuBar() );
+		imageTabPane = new TabPane();
+		rootNode.getChildren().addAll( new TopMenuBar(this), imageTabPane );
 	}
 	
 	private void initializeWindowDimensions() {
@@ -42,6 +49,20 @@ public class MainWindow {
 	
 	public void show() {
 		stage.show();
+	}
+	
+	public void openFileAction() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle( StringConstants.FILELOAD_TITLE );
+		fileChooser.getExtensionFilters().addAll( new FileExtensionFilterList() );
+		File l_returnFile = fileChooser.showOpenDialog( stage );
+		if ( l_returnFile != null ) {
+			
+		}
+	}
+	
+	public void saveFileAction() {
+		
 	}
 	
 }
