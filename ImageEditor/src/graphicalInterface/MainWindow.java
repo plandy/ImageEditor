@@ -42,6 +42,10 @@ public class MainWindow {
 		initializeWindowDimensions();
 		
 		imageTabPane = new TabPane();
+		imageTabPane.setTabMinHeight( ImageTab.THUMBNAIL_HEIGHT );
+		imageTabPane.setTabMaxHeight( ImageTab.THUMBNAIL_HEIGHT );
+		imageTabPane.setTabMinWidth( ImageTab.THUMBNAIL_WIDTH );
+		imageTabPane.setTabMaxWidth( ImageTab.THUMBNAIL_WIDTH );
 		rootNode.getChildren().addAll( new TopMenuBar(this), imageTabPane );
 	}
 	
