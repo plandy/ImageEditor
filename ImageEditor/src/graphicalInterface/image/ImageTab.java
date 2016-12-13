@@ -11,16 +11,21 @@ public class ImageTab extends Tab {
 	//private final ObservableList<ImageCanvas> imageLayers;
 	//private final ScrollPane scrollPane;
 	
-	public static final double THUMBNAIL_HEIGHT = 75;
-	public static final double THUMBNAIL_WIDTH = 75;
+	private double thumbnailHeight = 50;
+	private double thumbnailWidth = 50;
 	
 	public ImageTab( Image p_image ) {
 		this.setContent( new ImageCanvas(p_image) );
 		ImageView thumbnail = new ImageView( p_image );
-		thumbnail.setFitHeight( THUMBNAIL_HEIGHT );
-		thumbnail.setFitWidth( THUMBNAIL_WIDTH );
 		thumbnail.setPreserveRatio( true );
 		this.setGraphic( thumbnail );
+	}
+	
+	public void setThumbnailDimensions( double p_height, double p_width ) {
+		thumbnailHeight = p_height;
+		thumbnailWidth = p_width;
+		( (ImageView) this.getGraphic() ).setFitHeight( thumbnailHeight );
+		( (ImageView) this.getGraphic() ).setFitWidth( thumbnailWidth );
 	}
 	
 }

@@ -8,11 +8,11 @@ import javax.imageio.ImageIO;
 
 import applicationConstants.StringConstants;
 import graphicalInterface.image.ImageTab;
+import graphicalInterface.image.ImageTabPane;
 import graphicalInterface.menus.fileMenu.fileDialog.FileExtensionFilterList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -24,7 +24,7 @@ public class MainWindow {
 	private final Stage stage;
 	private final Scene scene;
 	private final VBox rootNode;
-	private final TabPane imageTabPane;
+	private final ImageTabPane imageTabPane;
 	
 	public MainWindow() {
 		
@@ -41,11 +41,7 @@ public class MainWindow {
 		
 		initializeWindowDimensions();
 		
-		imageTabPane = new TabPane();
-		imageTabPane.setTabMinHeight( ImageTab.THUMBNAIL_HEIGHT );
-		imageTabPane.setTabMaxHeight( ImageTab.THUMBNAIL_HEIGHT );
-		imageTabPane.setTabMinWidth( ImageTab.THUMBNAIL_WIDTH );
-		imageTabPane.setTabMaxWidth( ImageTab.THUMBNAIL_WIDTH );
+		imageTabPane = new ImageTabPane();
 		rootNode.getChildren().addAll( new TopMenuBar(this), imageTabPane );
 	}
 	
@@ -87,7 +83,7 @@ public class MainWindow {
 	
 	private void openLoadedImage( Image p_image ) {
 		ImageTab imageTab = new ImageTab( p_image );
-		imageTabPane.getTabs().add( imageTab );
+		imageTabPane.addTab( imageTab );
 	}
 	
 	public void saveFileAction() {
