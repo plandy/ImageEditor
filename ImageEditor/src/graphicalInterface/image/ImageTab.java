@@ -1,31 +1,73 @@
 package graphicalInterface.image;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 
 public class ImageTab extends Tab {
 	
-	//private final ObservableList<ImageCanvas> imageLayers;
+	private final ObservableList<ImageCanvas> imageLayers = FXCollections.observableArrayList();
 	//private final ScrollPane scrollPane;
 	
 	private double thumbnailHeight = 50;
 	private double thumbnailWidth = 50;
 	
+	private ListView<ImageView> imageLayersSelectionView = new ListView<ImageView>();
+	
+	private StackPane imageLayersStackPane = new StackPane();
+	
+	private GridPane baseLayoutPane = new GridPane();
+	
 	public ImageTab( Image p_image ) {
-		this.setContent( new ImageCanvas(p_image) );
+		//this.setContent( new ImageCanvas(p_image) );
+		super.setContent( baseLayoutPane );
+		setThumbnail( p_image );
+		
+		setBaseImage( p_image );
+		
+		doBaseLayout();
+	}
+	
+	private void addImageLayer( ImageCanvas p_imageCanvasLayer ) {
+		imageLayers.add( p_imageCanvasLayer );
+		imageLayersStackPane.getChildren().add( p_imageCanvasLayer );
+	}
+	
+	private void setBaseImage( Image p_image ) {
+		ImageCanvas baseCanvas = new ImageCanvas( p_image );
+		addImageLayer( baseCanvas );
+	}
+	
+	private void doBaseLayout() {
+		baseLayoutPane.add( imageLayersStackPane, 0, 0);
+		ColumnConstraints col0Constraint = new ColumnConstraints();
+		col0Constraint.setPercentWidth(70);
+		baseLayoutPane.getColumnConstraints().add( 0, col0Constraint );
+		
+		baseLayoutPane.add( imageLayersSelectionView, 1, 0);
+		ColumnConstraints col1Constraint = new ColumnConstraints();
+		col1Constraint.setPercentWidth(15);
+		baseLayoutPane.getColumnConstraints().add( 1, col1Constraint );
+	}
+	
+	private void setThumbnail( Image p_image ) {
 		ImageView thumbnail = new ImageView( p_image );
 		thumbnail.setPreserveRatio( true );
-		this.setGraphic( thumbnail );
+		super.setGraphic( thumbnail );
 	}
 	
 	public void setThumbnailDimensions( double p_height, double p_width ) {
 		thumbnailHeight = p_height;
 		thumbnailWidth = p_width;
-		( (ImageView) this.getGraphic() ).setFitHeight( thumbnailHeight );
-		( (ImageView) this.getGraphic() ).setFitWidth( thumbnailWidth );
+		( (ImageView) super.getGraphic() ).setFitHeight( thumbnailHeight );
+		( (ImageView) super.getGraphic() ).setFitWidth( thumbnailWidth );
 	}
 	
 }
