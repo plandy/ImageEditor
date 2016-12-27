@@ -12,7 +12,7 @@ public class GridPaneHorizontal extends GridPane {
 		super();
 	}
 	
-	public void addNodeToRight( Node p_node, double p_widthConstraint ) {
+	public void addNode( Node p_node, double p_widthConstraint ) {
 		super.add( p_node, numChildren, 0 );
 		ColumnConstraints colConstraint = new ColumnConstraints();
 		colConstraint.setPercentWidth( p_widthConstraint );

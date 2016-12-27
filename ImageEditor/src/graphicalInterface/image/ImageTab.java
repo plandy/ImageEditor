@@ -48,9 +48,9 @@ public class ImageTab extends Tab {
 	}
 	
 	private void doBaseLayout() {		
-		baseLayoutPane.addNodeToRight( new VBox(), 15 );
-		baseLayoutPane.addNodeToRight( imageLayersStackPane, 70 );
-		baseLayoutPane.addNodeToRight( imageLayersSelectionView, 15 );
+		baseLayoutPane.addNode( new VBox(), 15 );
+		baseLayoutPane.addNode( imageLayersStackPane, 70 );
+		baseLayoutPane.addNode( imageLayersSelectionView, 15 );
 	}
 	
 	private void setThumbnail( Image p_image ) {
