@@ -2,6 +2,7 @@ package graphicalInterface.image;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -10,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 public class ImageTab extends Tab {
 	
@@ -23,7 +25,7 @@ public class ImageTab extends Tab {
 	
 	private StackPane imageLayersStackPane = new StackPane();
 	
-	private GridPane baseLayoutPane = new GridPane();
+	private GridPaneHorizontal baseLayoutPane = new GridPaneHorizontal();
 	
 	public ImageTab( Image p_image ) {
 		//this.setContent( new ImageCanvas(p_image) );
@@ -45,16 +47,10 @@ public class ImageTab extends Tab {
 		addImageLayer( baseCanvas );
 	}
 	
-	private void doBaseLayout() {
-		baseLayoutPane.add( imageLayersStackPane, 0, 0);
-		ColumnConstraints col0Constraint = new ColumnConstraints();
-		col0Constraint.setPercentWidth(70);
-		baseLayoutPane.getColumnConstraints().add( 0, col0Constraint );
-		
-		baseLayoutPane.add( imageLayersSelectionView, 1, 0);
-		ColumnConstraints col1Constraint = new ColumnConstraints();
-		col1Constraint.setPercentWidth(15);
-		baseLayoutPane.getColumnConstraints().add( 1, col1Constraint );
+	private void doBaseLayout() {		
+		baseLayoutPane.addNodeToRight( new VBox(), 15 );
+		baseLayoutPane.addNodeToRight( imageLayersStackPane, 70 );
+		baseLayoutPane.addNodeToRight( imageLayersSelectionView, 15 );
 	}
 	
 	private void setThumbnail( Image p_image ) {
