@@ -1,6 +1,9 @@
 package graphicalInterface.image;
 
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 public class ImageTabPane extends TabPane {
 	
@@ -14,11 +17,15 @@ public class ImageTabPane extends TabPane {
 		this.setTabMaxHeight( TAB_THUMBNAIL_HEIGHT );
 		this.setTabMinWidth( TAB_THUMBNAIL_WIDTH );
 		this.setTabMaxWidth( TAB_THUMBNAIL_WIDTH );
+		
+		VBox.setVgrow( this, Priority.ALWAYS );
 	}
 	
-	public void addTab( ImageTab p_imageTab ) {
-		this.getTabs().add( p_imageTab );
-		p_imageTab.setThumbnailDimensions( TAB_THUMBNAIL_HEIGHT, TAB_THUMBNAIL_WIDTH );
+	public void addTab( Image p_image ) {
+		ImageTab newTab = new ImageTab( p_image );
+		this.getTabs().add( newTab );
+		newTab.setThumbnailDimensions( TAB_THUMBNAIL_HEIGHT, TAB_THUMBNAIL_WIDTH );
+		newTab.doBaseLayout();
 	}
 	
 }

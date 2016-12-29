@@ -1,17 +1,13 @@
 package graphicalInterface.image;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 public class ImageTab extends Tab {
 	
@@ -28,13 +24,9 @@ public class ImageTab extends Tab {
 	private GridPaneHorizontal baseLayoutPane = new GridPaneHorizontal();
 	
 	public ImageTab( Image p_image ) {
-		//this.setContent( new ImageCanvas(p_image) );
 		super.setContent( baseLayoutPane );
 		setThumbnail( p_image );
-		
 		setBaseImage( p_image );
-		
-		doBaseLayout();
 	}
 	
 	private void addImageLayer( ImageCanvas p_imageCanvasLayer ) {
@@ -43,12 +35,20 @@ public class ImageTab extends Tab {
 	}
 	
 	private void setBaseImage( Image p_image ) {
+		//imageLayersStackPane.getChildren().add(e)
+		
 		ImageCanvas baseCanvas = new ImageCanvas( p_image );
 		addImageLayer( baseCanvas );
+		
 	}
 	
-	private void doBaseLayout() {		
-		baseLayoutPane.addNode( new VBox(), 15 );
+	public void doBaseLayout() {
+		//baseLayoutPane.setAlignment( Pos.CENTER );
+		
+		DoubleProperty heightProperty = imageLayersSelectionView.prefHeightProperty();// = this.getTabPane().heightProperty();
+		heightProperty.setValue( this.getTabPane().heightProperty().getValue() );
+		
+		baseLayoutPane.addNode( new ListView<ImageView>(), 15 );
 		baseLayoutPane.addNode( imageLayersStackPane, 70 );
 		baseLayoutPane.addNode( imageLayersSelectionView, 15 );
 	}

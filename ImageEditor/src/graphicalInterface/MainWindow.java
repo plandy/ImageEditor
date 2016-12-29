@@ -7,7 +7,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import applicationConstants.StringConstants;
-import graphicalInterface.image.ImageTab;
 import graphicalInterface.image.ImageTabPane;
 import graphicalInterface.menus.fileMenu.fileDialog.FileExtensionFilterList;
 import javafx.embed.swing.SwingFXUtils;
@@ -81,9 +80,8 @@ public class MainWindow {
 		return image;
 	}
 	
-	private void openLoadedImage( Image p_image ) {
-		ImageTab imageTab = new ImageTab( p_image );
-		imageTabPane.addTab( imageTab );
+	private void openLoadedImage( Image p_image ) {		
+		imageTabPane.addTab( p_image );
 	}
 	
 	public void saveFileAction() {
