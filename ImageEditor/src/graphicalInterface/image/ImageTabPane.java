@@ -26,6 +26,7 @@ public class ImageTabPane extends TabPane {
 		this.getTabs().add( newTab );
 		newTab.setThumbnailDimensions( TAB_THUMBNAIL_HEIGHT, TAB_THUMBNAIL_WIDTH );
 		newTab.doBaseLayout();
+		super.getSelectionModel().select( newTab );
 	}
 	
 }
