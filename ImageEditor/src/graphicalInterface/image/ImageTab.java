@@ -7,6 +7,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
 
 public class ImageTab extends Tab {
@@ -17,40 +18,55 @@ public class ImageTab extends Tab {
 	private double thumbnailHeight = 50;
 	private double thumbnailWidth = 50;
 	
-	private ListView<ImageView> imageLayersSelectionView = new ListView<ImageView>();
+	private final double imageCanvasHeight;
+	private final double imageCanvasWidth;
 	
+	private final ImageLayerSelectionView imageLayerSelectionView = new ImageLayerSelectionView( this );
 	private StackPane imageLayersStackPane = new StackPane();
+	private final GridPaneHorizontal baseLayoutPane = new GridPaneHorizontal();
 	
-	private GridPaneHorizontal baseLayoutPane = new GridPaneHorizontal();
+	public void addImageLayerButtonAction() {
+		addImageLayer( new WritableImage((int)imageCanvasWidth, (int)imageCanvasHeight) );
+	}
 	
 	public ImageTab( Image p_image ) {
 		super.setContent( baseLayoutPane );
 		setThumbnail( p_image );
 		setBaseImage( p_image );
+		
+		imageCanvasHeight = p_image.getHeight();
+		imageCanvasWidth = p_image.getWidth();
 	}
 	
-	private void addImageLayer( ImageCanvas p_imageCanvasLayer ) {
-		imageLayers.add( p_imageCanvasLayer );
-		imageLayersStackPane.getChildren().add( p_imageCanvasLayer );
+	private void addImageLayer( Image p_image ) {
+		ImageCanvas imageLayerCanvas = new ImageCanvas( p_image );
+		imageLayers.add( imageLayerCanvas );
+		imageLayersStackPane.getChildren().add( imageLayerCanvas );
+		addLayerToViewer( p_image );
 	}
 	
-	private void setBaseImage( Image p_image ) {
-		//imageLayersStackPane.getChildren().add(e)
-		
-		ImageCanvas baseCanvas = new ImageCanvas( p_image );
-		addImageLayer( baseCanvas );
-		
+	private void setBaseImage( Image p_image ) {		
+		addImageLayer( p_image );
+	}
+	
+	private void addLayerToViewer( Image p_image ) {
+		ImageView thumbnail = new ImageView( p_image );
+		thumbnail.setPreserveRatio( true );
+		thumbnail.setFitHeight(150);
+		thumbnail.setFitWidth(150);
+		imageLayerSelectionView.addLayerToView( thumbnail );
 	}
 	
 	public void doBaseLayout() {
 		//baseLayoutPane.setAlignment( Pos.CENTER );
 		
-		DoubleProperty heightProperty = imageLayersSelectionView.prefHeightProperty();// = this.getTabPane().heightProperty();
-		heightProperty.setValue( this.getTabPane().heightProperty().getValue() );
+		//DoubleProperty heightProperty = imageLayersSelectionView.prefHeightProperty();// = this.getTabPane().heightProperty();
+		DoubleProperty heightProperty = imageLayerSelectionView.prefHeightProperty();
+		heightProperty.setValue( super.getTabPane().heightProperty().getValue() );
 		
 		baseLayoutPane.addNode( new ListView<ImageView>(), 15 );
 		baseLayoutPane.addNode( imageLayersStackPane, 70 );
-		baseLayoutPane.addNode( imageLayersSelectionView, 15 );
+		baseLayoutPane.addNode( imageLayerSelectionView, 15 );
 	}
 	
 	private void setThumbnail( Image p_image ) {
