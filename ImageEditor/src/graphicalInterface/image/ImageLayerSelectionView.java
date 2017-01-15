@@ -33,6 +33,7 @@ public class ImageLayerSelectionView extends VBox {
 		layerTupleList.add( layerTuple );
 		
 		imageLayersListView.getItems().add( layerTuple.layerViewPane );
+		imageLayersListView.getSelectionModel().select( layerTuple.layerViewPane );
 	}
 	
 	private ImageView createLayerThumbnail( ImageCanvas p_imageLayerCanvas ) {
