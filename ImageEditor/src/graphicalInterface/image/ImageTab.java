@@ -25,6 +25,9 @@ public class ImageTab extends Tab {
 	private StackPane imageLayersStackPane = new StackPane();
 	private final GridPaneHorizontal baseLayoutPane = new GridPaneHorizontal();
 	
+	private double layerThumbnailHeightProperty = 150.0;
+	private double layerThumbnailWidthProperty = 150.0;
+	
 	public void addImageLayerButtonAction() {
 		addImageLayer( new WritableImage((int)imageCanvasWidth, (int)imageCanvasHeight) );
 	}
@@ -42,19 +45,15 @@ public class ImageTab extends Tab {
 		ImageCanvas imageLayerCanvas = new ImageCanvas( p_image );
 		imageLayers.add( imageLayerCanvas );
 		imageLayersStackPane.getChildren().add( imageLayerCanvas );
-		addLayerToViewer( p_image );
+		addLayerToViewer( imageLayerCanvas );
 	}
 	
 	private void setBaseImage( Image p_image ) {		
 		addImageLayer( p_image );
 	}
 	
-	private void addLayerToViewer( Image p_image ) {
-		ImageView thumbnail = new ImageView( p_image );
-		thumbnail.setPreserveRatio( true );
-		thumbnail.setFitHeight(150);
-		thumbnail.setFitWidth(150);
-		imageLayerSelectionView.addLayerToView( thumbnail );
+	private void addLayerToViewer( ImageCanvas p_imageLayerCanvas ) {
+		imageLayerSelectionView.addLayerToView( p_imageLayerCanvas );
 	}
 	
 	public void doBaseLayout() {
@@ -80,6 +79,14 @@ public class ImageTab extends Tab {
 		thumbnailWidth = p_width;
 		( (ImageView) super.getGraphic() ).setFitHeight( thumbnailHeight );
 		( (ImageView) super.getGraphic() ).setFitWidth( thumbnailWidth );
+	}
+
+	public double getLayerThumbnailHeightProperty() {
+		return layerThumbnailHeightProperty;
+	}
+
+	public double getLayerThumbnailWidthProperty() {
+		return layerThumbnailWidthProperty;
 	}
 	
 }
