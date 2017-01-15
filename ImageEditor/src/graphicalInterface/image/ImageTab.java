@@ -53,7 +53,19 @@ public class ImageTab extends Tab {
 	}
 	
 	public void imageLayerSelectionAction( ImageCanvas p_selectedImageLayerCanvas ) {
-		//TODO
+		
+		for ( ImageCanvas imageLayer : imageLayers ) {
+//			if ( imageLayer == p_selectedImageLayerCanvas ) {
+//				imageLayer.enableLayer();
+//			} else {
+//				imageLayer.disableLayer();
+//			}
+			
+			imageLayer.disableLayer();
+		}
+		
+		p_selectedImageLayerCanvas.enableLayer();
+		
 	}
 	
 	private void addLayerToViewer( ImageCanvas p_imageLayerCanvas ) {

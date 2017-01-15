@@ -54,6 +54,7 @@ public class ImageLayerSelectionView extends VBox {
 		imageLayersListView.getSelectionModel().selectedItemProperty().addListener( (observable, oldValue, newValue) -> {
 			LayerTuple layerTuple = findLayer( newValue );
 			ImageCanvas imageLayerCanvas = layerTuple.imageLayerCanvas;
+			
 			parentImageTab.imageLayerSelectionAction( imageLayerCanvas );
 		});
 	}
