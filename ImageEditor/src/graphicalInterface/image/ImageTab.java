@@ -28,10 +28,6 @@ public class ImageTab extends Tab {
 	private double layerThumbnailHeightProperty = 150.0;
 	private double layerThumbnailWidthProperty = 150.0;
 	
-	public void addImageLayerButtonAction() {
-		addImageLayer( new WritableImage((int)imageCanvasWidth, (int)imageCanvasHeight) );
-	}
-	
 	public ImageTab( Image p_image ) {
 		super.setContent( baseLayoutPane );
 		setThumbnail( p_image );
@@ -50,6 +46,14 @@ public class ImageTab extends Tab {
 	
 	private void setBaseImage( Image p_image ) {		
 		addImageLayer( p_image );
+	}
+	
+	public void addImageLayerButtonAction() {
+		addImageLayer( new WritableImage((int)imageCanvasWidth, (int)imageCanvasHeight) );
+	}
+	
+	public void imageLayerSelectionAction( ImageCanvas p_selectedImageLayerCanvas ) {
+		//TODO
 	}
 	
 	private void addLayerToViewer( ImageCanvas p_imageLayerCanvas ) {
