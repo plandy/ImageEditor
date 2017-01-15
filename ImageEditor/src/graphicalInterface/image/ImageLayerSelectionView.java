@@ -80,6 +80,7 @@ public class ImageLayerSelectionView extends VBox {
 		for ( LayerTuple layerTuple : layerTupleList ) {
 			if ( layerTuple.layerViewPane == p_pane ) {
 				layer = layerTuple;
+				break;
 			}
 		}
 		
