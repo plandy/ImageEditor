@@ -55,12 +55,6 @@ public class ImageTab extends Tab {
 	public void imageLayerSelectionAction( ImageCanvas p_selectedImageLayerCanvas ) {
 		
 		for ( ImageCanvas imageLayer : imageLayers ) {
-//			if ( imageLayer == p_selectedImageLayerCanvas ) {
-//				imageLayer.enableLayer();
-//			} else {
-//				imageLayer.disableLayer();
-//			}
-			
 			imageLayer.disableLayer();
 		}
 		

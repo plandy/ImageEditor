@@ -1,5 +1,10 @@
 package graphicalInterface.image;
 
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -8,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 public class ImageLayerSelectionView extends VBox {
 	
@@ -15,6 +21,8 @@ public class ImageLayerSelectionView extends VBox {
 	private final Button addLayerButton = new Button( "Add layer" );
 	private final ImageTab parentImageTab;
 	private final ObservableList<LayerTuple> layerTupleList = FXCollections.observableArrayList();
+	
+	private volatile HashMap<ImageCanvas, ImageView> map = new HashMap<>();
 	
 	public ImageLayerSelectionView( ImageTab p_imageTab ) {
 		super();
@@ -25,6 +33,9 @@ public class ImageLayerSelectionView extends VBox {
 		super.getChildren().add( imageLayersListView );
 		
 		setListeners();
+		
+		ThumbnailUpdaterService service = new ThumbnailUpdaterService();
+		service.start();
 	}
 	
 	public void addLayerToView( ImageCanvas p_imageLayerCanvas ) {
@@ -73,6 +84,7 @@ public class ImageLayerSelectionView extends VBox {
 			layerViewPane.setMaxHeight( layerThumbnail.getFitHeight() );
 			layerViewPane.setMaxWidth( layerThumbnail.getFitWidth() );
 		}
+		
 	}
 	
 	private LayerTuple findLayer( Pane p_pane ) {
@@ -87,5 +99,50 @@ public class ImageLayerSelectionView extends VBox {
 		
 		return layer;
 	}
+	
+	private void updateThumbnails() {
+		for (LayerTuple layerTuple : layerTupleList ) {
+			ImageView thumbnail = map.get( layerTuple.imageLayerCanvas );
+			for ( Pane pane : imageLayersListView.getItems() ) {
+				if ( pane == layerTuple.layerViewPane ) {
+					pane.getChildren().clear();
+					pane.getChildren().add( thumbnail );
+				}
+			}
+		}
+	}
+	
+	private final class ThumbnailUpdaterService extends Thread {
+		
+		@Override
+		public void run() {
+			while ( true ) {
+				try {
+					Thread.sleep( 1000 * 30 );
+					
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							for ( LayerTuple layerTuple : layerTupleList ) {
+								ImageView imageView = createLayerThumbnail( layerTuple.imageLayerCanvas );
+								map.put( layerTuple.imageLayerCanvas, imageView );
+							}
+						}	
+					});
+						
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							updateThumbnails();
+						}	
+					});
+				} catch (InterruptedException e) {
+					
+				}
+			}
+		}
+	}
+	
+	
 
 }
