@@ -85,7 +85,19 @@ public class MainWindow {
 	}
 	
 	public void saveFileAction() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle( StringConstants.FILESAVE_TITLE );
+		fileChooser.getExtensionFilters().addAll( new FileExtensionFilterList() );
 		
+		File saveFile = fileChooser.showSaveDialog( stage );
+		
+		Image imageToSave = imageTabPane.getFocusedTab().getCompositeImage();
+		
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage( imageToSave,null), "png", saveFile );
+        } catch (IOException ex) {
+        	throw new RuntimeException();
+        }
 	}
 	
 }

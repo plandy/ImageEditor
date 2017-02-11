@@ -29,4 +29,8 @@ public class ImageTabPane extends TabPane {
 		super.getSelectionModel().select( newTab );
 	}
 	
+	public ImageTab getFocusedTab() {
+		return (ImageTab)super.getSelectionModel().getSelectedItem();
+	}
+	
 }

@@ -90,6 +90,10 @@ public class ImageTab extends Tab {
 		( (ImageView) super.getGraphic() ).setFitHeight( thumbnailHeight );
 		( (ImageView) super.getGraphic() ).setFitWidth( thumbnailWidth );
 	}
+	
+	public Image getCompositeImage() {
+		return imageLayersStackPane.snapshot(null, null);
+	}
 
 	public double getLayerThumbnailHeightProperty() {
 		return layerThumbnailHeightProperty;
