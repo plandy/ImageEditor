@@ -3,6 +3,7 @@ package graphicalInterface.image;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Group;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
@@ -22,8 +23,9 @@ public class ImageTab extends Tab {
 	private final double imageCanvasWidth;
 	
 	private final ImageLayerSelectionView imageLayerSelectionView = new ImageLayerSelectionView( this );
-	private StackPane imageLayersStackPane = new StackPane();
+	private final StackPane imageLayersStackPane = new StackPane();
 	private final GridPaneHorizontal baseLayoutPane = new GridPaneHorizontal();
+	private final Group imageLayerGroup = new Group();
 	
 	private double layerThumbnailHeightProperty = 150.0;
 	private double layerThumbnailWidthProperty = 150.0;
@@ -35,12 +37,14 @@ public class ImageTab extends Tab {
 		
 		imageCanvasHeight = p_image.getHeight();
 		imageCanvasWidth = p_image.getWidth();
+		
+		imageLayersStackPane.getChildren().add( imageLayerGroup );
 	}
 	
 	private void addImageLayer( Image p_image ) {
 		ImageCanvas imageLayerCanvas = new ImageCanvas( p_image );
 		imageLayers.add( imageLayerCanvas );
-		imageLayersStackPane.getChildren().add( imageLayerCanvas );
+		imageLayerGroup.getChildren().add( imageLayerCanvas );
 		addLayerToViewer( imageLayerCanvas );
 	}
 	
@@ -92,7 +96,7 @@ public class ImageTab extends Tab {
 	}
 	
 	public Image getCompositeImage() {
-		return imageLayersStackPane.snapshot(null, null);
+		return imageLayerGroup.snapshot(null, null);
 	}
 
 	public double getLayerThumbnailHeightProperty() {
