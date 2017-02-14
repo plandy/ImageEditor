@@ -45,9 +45,4 @@ public class MainWindow extends Stage {
 		super.setHeight( l_screenHeight );
 	}
 	
-	@Override
-	public void close() {
-		Platform.exit();
-	}
-	
 }
