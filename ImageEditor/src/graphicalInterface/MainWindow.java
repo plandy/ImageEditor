@@ -2,6 +2,7 @@ package graphicalInterface;
 
 import applicationConstants.StringConstants;
 import graphicalInterface.image.ImageTabPane;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -32,6 +33,7 @@ public class MainWindow extends Stage {
 		
 		imageTabPane = new ImageTabPane();
 		rootNode.getChildren().addAll( new TopMenuBar(this), imageTabPane );
+		
 	}
 	
 	private void initializeWindowDimensions() {
@@ -41,6 +43,11 @@ public class MainWindow extends Stage {
 		int l_screenHeight = SystemInformationUtility.getScreenHeight();
 		super.setWidth( l_screenWidth );
 		super.setHeight( l_screenHeight );
+	}
+	
+	@Override
+	public void close() {
+		Platform.exit();
 	}
 	
 }
