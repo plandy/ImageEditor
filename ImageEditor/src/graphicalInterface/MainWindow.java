@@ -2,7 +2,6 @@ package graphicalInterface;
 
 import applicationConstants.StringConstants;
 import graphicalInterface.image.ImageTabPane;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;

@@ -4,7 +4,6 @@ import javafx.beans.property.DoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,6 +22,7 @@ public class ImageTab extends Tab {
 	private final double imageCanvasWidth;
 	
 	private final ImageLayerSelectionView imageLayerSelectionView = new ImageLayerSelectionView( this );
+	private final ToolSelectionGrid toolSelectionGrid = new ToolSelectionGrid();
 	private final StackPane imageLayersStackPane = new StackPane();
 	private final GridPaneHorizontal baseLayoutPane = new GridPaneHorizontal();
 	private final Group imageLayerGroup = new Group();
@@ -39,6 +39,7 @@ public class ImageTab extends Tab {
 		imageCanvasWidth = p_image.getWidth();
 		
 		imageLayersStackPane.getChildren().add( imageLayerGroup );
+		
 	}
 	
 	private void addImageLayer( Image p_image ) {
@@ -77,7 +78,7 @@ public class ImageTab extends Tab {
 		DoubleProperty heightProperty = imageLayerSelectionView.prefHeightProperty();
 		heightProperty.setValue( super.getTabPane().heightProperty().getValue() );
 		
-		baseLayoutPane.addNode( new ListView<ImageView>(), 15 );
+		baseLayoutPane.addNode( toolSelectionGrid, 15 );
 		baseLayoutPane.addNode( imageLayersStackPane, 70 );
 		baseLayoutPane.addNode( imageLayerSelectionView, 15 );
 	}
