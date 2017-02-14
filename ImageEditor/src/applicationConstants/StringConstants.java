@@ -11,7 +11,8 @@ public class StringConstants {
 	public static final String FILESAVE_TITLE = new String ( "Save file" );
 	public static final String FILEEXIT_TITLE = new String ( "Exit" );
 	
-	public static final String LASSOSELECTOR = new String ( "Lasso Selector" );
+	public static final String SELECTOR_TITLE = new String ( "Selectors" );
+	public static final String LASSOSELECTOR_TITLE = new String ( "Lasso Selector" );
 	
 	public static final String FILEEXTENSION_ALL = new String ( "*" );
 	public static final String FILEEXTENSION_PNG = new String ( "*.png" );
