@@ -3,16 +3,19 @@ package graphicalInterface.image;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 public class ImageTab extends Tab {
 	
 	private final ObservableList<ImageCanvas> imageLayers = FXCollections.observableArrayList();
+	private ImageCanvas selectedLayer;
 	//private final ScrollPane scrollPane;
 	
 	private double thumbnailHeight = 50;
@@ -22,7 +25,7 @@ public class ImageTab extends Tab {
 	private final double imageCanvasWidth;
 	
 	private final ImageLayerSelectionView imageLayerSelectionView = new ImageLayerSelectionView( this );
-	private final ToolSelectionGrid toolSelectionGrid = new ToolSelectionGrid();
+	private final ToolSelectionGrid toolSelectionGrid = new ToolSelectionGrid( this );
 	private final StackPane imageLayersStackPane = new StackPane();
 	private final GridPaneHorizontal baseLayoutPane = new GridPaneHorizontal();
 	private final Group imageLayerGroup = new Group();
@@ -59,11 +62,15 @@ public class ImageTab extends Tab {
 	
 	public void imageLayerSelectionAction( ImageCanvas p_selectedImageLayerCanvas ) {
 		
+		toolSelectionGrid.deselectCurrentTool();
+		
 		for ( ImageCanvas imageLayer : imageLayers ) {
 			imageLayer.disableLayer();
 		}
 		
 		p_selectedImageLayerCanvas.enableLayer();
+		
+		setSelectedLayer( p_selectedImageLayerCanvas );
 		
 	}
 	
@@ -81,6 +88,10 @@ public class ImageTab extends Tab {
 		baseLayoutPane.addNode( toolSelectionGrid, 15 );
 		baseLayoutPane.addNode( imageLayersStackPane, 70 );
 		baseLayoutPane.addNode( imageLayerSelectionView, 15 );
+	}
+	
+	public void setActiveTool( EventHandler<MouseEvent> p_toolHandler ) {
+		
 	}
 	
 	private void setThumbnail( Image p_image ) {
@@ -106,6 +117,14 @@ public class ImageTab extends Tab {
 
 	public double getLayerThumbnailWidthProperty() {
 		return layerThumbnailWidthProperty;
+	}
+	
+	private void setSelectedLayer( ImageCanvas p_imageLayer ) {
+		selectedLayer = p_imageLayer;
+	}
+	
+	public ImageCanvas getSelectedLayer() {
+		return selectedLayer;
 	}
 	
 }

@@ -1,9 +1,6 @@
 package graphicalInterface.image;
 
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
 public class ImageLayerSelectionView extends VBox {
 	
@@ -23,6 +19,9 @@ public class ImageLayerSelectionView extends VBox {
 	private final ObservableList<LayerTuple> layerTupleList = FXCollections.observableArrayList();
 	
 	private final HashMap<ImageCanvas, ImageView> map = new HashMap<>();
+	
+	//number of seconds between updates
+	private final int thumbnailUpdateDelay = 10;
 	
 	public ImageLayerSelectionView( ImageTab p_imageTab ) {
 		super();
@@ -118,7 +117,7 @@ public class ImageLayerSelectionView extends VBox {
 		public void run() {
 			while ( true ) {
 				try {
-					Thread.sleep( 1000 * 30 );
+					Thread.sleep( 1000 * thumbnailUpdateDelay );
 					
 					Platform.runLater(new Runnable() {
 						@Override

@@ -2,13 +2,11 @@ package graphicalInterface.image;
 
 import java.util.Random;
 
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class ImageCanvas extends Canvas {
@@ -80,26 +78,14 @@ public class ImageCanvas extends Canvas {
 	}
 	
 	public void enableLayer() {
-		super.addEventHandler(MouseEvent.ANY, mouseHandler);
+		//super.addEventHandler(MouseEvent.ANY, mouseHandler);
+		//super.addEventHandler(MouseEvent.ANY, p_activeTool);
 		super.setMouseTransparent(false);
 	}
 	
 	public void disableLayer() {
-		super.removeEventHandler(MouseEvent.ANY, mouseHandler);
+		//super.removeEventHandler(MouseEvent.ANY, mouseHandler);
 		super.setMouseTransparent(true);
 	}
-	
-	private EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
-
-		@Override
-		public void handle(MouseEvent event) {
-			if ( MouseEvent.MOUSE_DRAGGED.equals(event.getEventType()) ) {
-				
-				gc.fillRect(event.getX(), event.getY(), 5.0, 5.0);
-			}
-			
-		}
-		
-	};
 	
 }
