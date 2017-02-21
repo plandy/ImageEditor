@@ -22,7 +22,7 @@ public class ImageLayerSelectionView extends VBox {
 	private final ImageTab parentImageTab;
 	private final ObservableList<LayerTuple> layerTupleList = FXCollections.observableArrayList();
 	
-	private volatile HashMap<ImageCanvas, ImageView> map = new HashMap<>();
+	private final HashMap<ImageCanvas, ImageView> map = new HashMap<>();
 	
 	public ImageLayerSelectionView( ImageTab p_imageTab ) {
 		super();
@@ -137,12 +137,10 @@ public class ImageLayerSelectionView extends VBox {
 						}	
 					});
 				} catch (InterruptedException e) {
-					
+					throw new RuntimeException();
 				}
 			}
 		}
 	}
-	
-	
 
 }
