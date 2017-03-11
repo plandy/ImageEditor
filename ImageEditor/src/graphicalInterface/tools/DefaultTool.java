@@ -5,6 +5,7 @@ import graphicalInterface.image.ImageTab;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 public class DefaultTool extends AbstractToolButton {
@@ -29,6 +30,7 @@ public class DefaultTool extends AbstractToolButton {
 	protected void onDeselectedAction() {
 		ImageCanvas selectedImageLayer = imageTab.getSelectedLayer();
 		selectedImageLayer.removeEventHandler( MouseEvent.ANY, currentEventHandler );
+		currentEventHandler = null;
 	}
 	
 	private class Tool implements EventHandler<MouseEvent>{
@@ -43,12 +45,12 @@ public class DefaultTool extends AbstractToolButton {
 
 		@Override
 		public void handle(MouseEvent event) {
-			
-			if ( MouseEvent.MOUSE_DRAGGED.equals(event.getEventType()) ) {
-				
-				gc.fillRect(event.getX(), event.getY(), 5.0, 5.0);
-			}
-			
+			if ( MouseButton.PRIMARY.equals(event.getButton()) ) {
+				if ( MouseEvent.MOUSE_DRAGGED.equals(event.getEventType()) ) {
+					
+					gc.fillRect(event.getX(), event.getY(), 5.0, 5.0);
+				}
+			}			
 		}
 		
 	};

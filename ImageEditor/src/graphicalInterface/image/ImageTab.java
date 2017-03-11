@@ -90,10 +90,6 @@ public class ImageTab extends Tab {
 		baseLayoutPane.addNode( imageLayerSelectionView, 15 );
 	}
 	
-	public void setActiveTool( EventHandler<MouseEvent> p_toolHandler ) {
-		
-	}
-	
 	private void setThumbnail( Image p_image ) {
 		ImageView thumbnail = new ImageView( p_image );
 		thumbnail.setPreserveRatio( true );
@@ -125,6 +121,31 @@ public class ImageTab extends Tab {
 	
 	public ImageCanvas getSelectedLayer() {
 		return selectedLayer;
+	}
+	
+	/**
+	 * 
+	 * Creates a temporary canvas to be used by tools as a visual aid to the user.
+	 * 
+	 * Not added to the layer system, but placed geometrically on top of all other canvases; ie. all mouse events reach this canvas before any other.
+	 * 
+	 * @return the newly created canvas
+	 */
+	public ImageCanvas addFakeCanvas() {
+		
+		ImageCanvas fakeCanvas = new ImageCanvas( imageCanvasWidth, imageCanvasHeight );
+		
+		imageLayerGroup.getChildren().add( fakeCanvas );
+		
+		return fakeCanvas;
+	}
+	
+	public void destroyFakeCanvas( ImageCanvas p_fakeCanvas ) {
+		boolean containedCanvas = imageLayerGroup.getChildren().remove( p_fakeCanvas );
+		
+		if ( containedCanvas == false ) {
+			throw new RuntimeException();
+		}
 	}
 	
 }

@@ -78,14 +78,15 @@ public class ImageCanvas extends Canvas {
 	}
 	
 	public void enableLayer() {
-		//super.addEventHandler(MouseEvent.ANY, mouseHandler);
-		//super.addEventHandler(MouseEvent.ANY, p_activeTool);
 		super.setMouseTransparent(false);
 	}
 	
 	public void disableLayer() {
-		//super.removeEventHandler(MouseEvent.ANY, mouseHandler);
 		super.setMouseTransparent(true);
+	}
+	
+	public Image snapshotCanvas() {
+		return super.snapshot( null, null );
 	}
 	
 }
