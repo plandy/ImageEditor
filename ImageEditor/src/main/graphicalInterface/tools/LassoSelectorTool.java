@@ -54,7 +54,6 @@ public class LassoSelectorTool extends AbstractToolButton {
 		
 		private Image selectedPixels;
 		
-		private double lastX = 0, lastY = 0;
 		private double xMin, xMax, yMin, yMax;
 		
 		private long startTime, endTime;
@@ -106,8 +105,6 @@ public class LassoSelectorTool extends AbstractToolButton {
 					gc.setLineDashes(1,10);
 					gc.stroke();			
 			
-					lastX = event.getX();
-					lastY = event.getY();
 				}
 				
 				if ( MouseEvent.MOUSE_RELEASED.equals(event.getEventType()) ) {
@@ -121,30 +118,36 @@ public class LassoSelectorTool extends AbstractToolButton {
 						ArrayList<Point2D> extraPoints = GeometryUtility.linearInterpolate2D( endPoint.getX(), beginPoint.getX(), endPoint.getY(), beginPoint.getY());
 						selectedPointsList.addAll( extraPoints );
 						
-						int size = 0;
+						selectedPixels = createSelectionImage( selectedImageLayer, selectedPointsList, xMin, xMax, yMin, yMax );
 						
-						WritableImage writeableImage = new WritableImage( (int)(xMax - xMin), (int)(yMax - yMin) );
-						PixelWriter l_writer = writeableImage.getPixelWriter();
-						
-						PixelReader l_reader = selectedImageLayer.snapshotCanvas().getPixelReader();
-						for ( int x = (int) xMin, newX = 0; x < xMax; x++, newX++ ) {
-							for ( int y = (int) yMin, newY = 0; y< yMax; y++, newY++ ) {
-								if ( GeometryUtility.containsPoint(new Point2D(x,y), selectedPointsList) ) {
-									Color l_pixelColor = l_reader.getColor(x, y);
-									l_writer.setColor(newX, newY, l_pixelColor);
-									size++;
-								}
-							}
-						}
-						
-						selectedPixels = writeableImage;
-						System.out.println("Num pixels in selected polygon: " + size);
 					} else {
 						gc.clearRect( 0, 0, fakeCanvas.getWidth(), fakeCanvas.getHeight() );
 					}
 				}//end if ( MouseEvent.MOUSE_RELEASED.equals(event.getEventType()) )
 			}
 			
+		}
+		
+		private Image createSelectionImage( ImageCanvas p_canvasLayer, ArrayList<Point2D> p_selectionBoundary, double xMin, double xMax, double yMin, double yMax ) {
+			WritableImage selectionImage = new WritableImage( (int)(xMax - xMin), (int)(yMax - yMin) );
+			PixelWriter l_writer = selectionImage.getPixelWriter();
+			
+			int size = 0;
+			
+			PixelReader l_reader = p_canvasLayer.snapshotCanvas().getPixelReader();
+			for ( int x = (int) xMin, newX = 0; x < xMax; x++, newX++ ) {
+				for ( int y = (int) yMin, newY = 0; y< yMax; y++, newY++ ) {
+					if ( GeometryUtility.containsPoint(new Point2D(x,y), p_selectionBoundary) ) {
+						Color l_pixelColor = l_reader.getColor(x, y);
+						l_writer.setColor(newX, newY, l_pixelColor);
+						size++;
+					}
+				}
+			}
+			
+			System.out.println( "Num pixels in selected polygon: " + size );
+			
+			return selectionImage;
 		}
 		
 		private void updateBounds( double x, double y ) {
