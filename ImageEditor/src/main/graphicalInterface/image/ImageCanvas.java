@@ -13,6 +13,8 @@ public class ImageCanvas extends Canvas {
 	
 	private final GraphicsContext gc = this.getGraphicsContext2D();
 	
+	private Image selectionImage;
+	
 	/**
 	 * Creates an ImageCanvas using the given Image
 	 */
@@ -87,6 +89,14 @@ public class ImageCanvas extends Canvas {
 	
 	public Image snapshotCanvas() {
 		return super.snapshot( null, null );
+	}
+	
+	public void setSelectionImage( Image p_newSelection ) {
+		selectionImage = p_newSelection;
+	}
+	
+	public Image getSelectionImage() {
+		return selectionImage;
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -15,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import main.graphicalInterface.image.ImageCanvas;
 import main.graphicalInterface.image.ImageTab;
+import main.graphicalInterface.menus.mouseContextMenu.mouseContextMenuItems.ContextCopyItem;
 import main.utility.GeometryUtility;
 
 public class LassoSelectorTool extends AbstractToolButton {
@@ -52,16 +54,20 @@ public class LassoSelectorTool extends AbstractToolButton {
 		private final ImageCanvas fakeCanvas;
 		private final GraphicsContext gc;
 		
-		private Image selectedPixels;
-		
 		private double xMin, xMax, yMin, yMax;
 		
 		private long startTime, endTime;
-		
 		//time in Seconds
 		private long minDragTime = 1 * 1000000000;
 		
 		private ArrayList<Point2D> selectedPointsList = new ArrayList<Point2D>( 400 );
+		
+		private final ContextMenu contextMenu = new ContextMenu();
+		{
+		contextMenu.getItems().add( new ContextCopyItem() );
+		}
+		
+		private boolean isActiveSelection = false;
 		
 		public Tool( ImageCanvas p_imageLayer, ImageCanvas p_selectedImageLayer ) {
 			selectedImageLayer = p_selectedImageLayer;
@@ -74,6 +80,7 @@ public class LassoSelectorTool extends AbstractToolButton {
 		public void handle(MouseEvent event) {
 			
 			if ( MouseButton.PRIMARY.equals(event.getButton()) ) {
+				contextMenu.hide();
 				
 				if ( MouseEvent.MOUSE_PRESSED.equals(event.getEventType()) ) {
 					
@@ -118,28 +125,35 @@ public class LassoSelectorTool extends AbstractToolButton {
 						ArrayList<Point2D> extraPoints = GeometryUtility.linearInterpolate2D( endPoint.getX(), beginPoint.getX(), endPoint.getY(), beginPoint.getY());
 						selectedPointsList.addAll( extraPoints );
 						
-						selectedPixels = createSelectionImage( selectedImageLayer, selectedPointsList, xMin, xMax, yMin, yMax );
+						Image selectionImage = createSelectionImage( selectedImageLayer, selectedPointsList, xMin, xMax, yMin, yMax );
+						fakeCanvas.setSelectionImage( selectionImage );
+						isActiveSelection = true;
 						
 					} else {
 						gc.clearRect( 0, 0, fakeCanvas.getWidth(), fakeCanvas.getHeight() );
+						isActiveSelection = false;
 					}
 				}//end if ( MouseEvent.MOUSE_RELEASED.equals(event.getEventType()) )
+			} else if ( MouseButton.SECONDARY.equals(event.getButton()) ) {
+				if ( MouseEvent.MOUSE_CLICKED.equals(event.getEventType()) && isActiveSelection == true ) {
+					contextMenu.show( fakeCanvas, event.getScreenX(), event.getScreenY() );
+				}
 			}
 			
 		}
 		
 		private Image createSelectionImage( ImageCanvas p_canvasLayer, ArrayList<Point2D> p_selectionBoundary, double xMin, double xMax, double yMin, double yMax ) {
 			WritableImage selectionImage = new WritableImage( (int)(xMax - xMin), (int)(yMax - yMin) );
-			PixelWriter l_writer = selectionImage.getPixelWriter();
+			PixelWriter writer = selectionImage.getPixelWriter();
 			
 			int size = 0;
 			
-			PixelReader l_reader = p_canvasLayer.snapshotCanvas().getPixelReader();
+			PixelReader reader = p_canvasLayer.snapshotCanvas().getPixelReader();
 			for ( int x = (int) xMin, newX = 0; x < xMax; x++, newX++ ) {
 				for ( int y = (int) yMin, newY = 0; y< yMax; y++, newY++ ) {
 					if ( GeometryUtility.containsPoint(new Point2D(x,y), p_selectionBoundary) ) {
-						Color l_pixelColor = l_reader.getColor(x, y);
-						l_writer.setColor(newX, newY, l_pixelColor);
+						Color pixelColor = reader.getColor(x, y);
+						writer.setColor(newX, newY, pixelColor);
 						size++;
 					}
 				}
