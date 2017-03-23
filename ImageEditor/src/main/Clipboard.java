@@ -18,7 +18,7 @@ public enum Clipboard {
 		if ( thing != null ) {
 			return ImageUtility.cloneImage( thing );
 		}
-		return thing;
+		return null;
 	}
 	
 

@@ -2,24 +2,61 @@ package main.graphicalInterface.image;
 
 import java.util.Random;
 
+import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import main.Clipboard;
+import main.graphicalInterface.menus.mouseContextMenu.mouseContextMenuItems.ContextPasteItem;
 
-public class ImageCanvas extends Canvas {
+public class ImageCanvas extends StackPane {
 	
-	private final GraphicsContext gc = this.getGraphicsContext2D();
+	private final Canvas canvas;
+	private final GraphicsContext gc;
 	
 	private Image selectionImage;
+	
+	private ContextMenu contextMenu = new ContextMenu();
+	{
+		this.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				
+				if ( MouseButton.SECONDARY.equals(event.getButton()) ) {
+					if ( MouseEvent.MOUSE_CLICKED.equals(event.getEventType()) ) {
+						Clipboard clipboard = Clipboard.INSTANCE;
+						Image clipboardImage = clipboard.loadFromClipboard();
+						if ( clipboardImage != null ) {
+							contextMenu.getItems().add( new ContextPasteItem() );
+						}
+						
+						contextMenu.show(ImageCanvas.this, event.getScreenX(), event.getScreenY());
+					}
+				}
+				
+
+			}
+			
+		});
+	}
 	
 	/**
 	 * Creates an ImageCanvas using the given Image
 	 */
 	public ImageCanvas( Image p_image ) {
-		super( p_image.getWidth(), p_image.getHeight() );
+		//super( p_image.getWidth(), p_image.getHeight() );
+		
+		canvas = new Canvas( p_image.getWidth(), p_image.getHeight() );
+		super.getChildren().add( canvas );
+		gc = canvas.getGraphicsContext2D();
 		
 		//GraphicsContext gc = this.getGraphicsContext2D();
 		gc.drawImage( p_image, 0, 0 );
@@ -34,7 +71,10 @@ public class ImageCanvas extends Canvas {
 	 * initially be transparent.
 	 */
 	public ImageCanvas( double p_width, double p_height ) {
-		super( p_width, p_height );
+		//super( p_width, p_height );
+		canvas = new Canvas( p_width, p_height );
+		super.getChildren().add( canvas );
+		gc = canvas.getGraphicsContext2D();
 		
 		//GraphicsContext gc = this.getGraphicsContext2D();
 		gc.drawImage( new WritableImage((int)p_width, (int)p_height), 0, 0 );
@@ -97,6 +137,10 @@ public class ImageCanvas extends Canvas {
 	
 	public Image getSelectionImage() {
 		return selectionImage;
+	}
+	
+	public GraphicsContext getGraphicsContext2D() {
+		return gc;
 	}
 	
 }
