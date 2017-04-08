@@ -12,6 +12,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import main.Clipboard;
 import main.graphicalInterface.menus.mouseContextMenu.mouseContextMenuItems.ContextPasteItem;
@@ -22,9 +23,11 @@ public class ImageCanvas extends StackPane {
 	private final GraphicsContext gc;
 	
 	private Image selectionImage;
-	
+
+	private ContextPasteItem contextPasteItem = new ContextPasteItem();
 	private ContextMenu contextMenu = new ContextMenu();
 	{
+		contextMenu.getItems().add( contextPasteItem );
 		this.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
 
 			@Override
@@ -35,18 +38,21 @@ public class ImageCanvas extends StackPane {
 						Clipboard clipboard = Clipboard.INSTANCE;
 						Image clipboardImage = clipboard.loadFromClipboard();
 						if ( clipboardImage != null ) {
-							contextMenu.getItems().add( new ContextPasteItem() );
+							contextPasteItem.setVisible(true);
+						} else {
+							contextPasteItem.setVisible(false);
 						}
 						
 						contextMenu.show(ImageCanvas.this, event.getScreenX(), event.getScreenY());
 					}
 				}
-				
 
 			}
 			
 		});
 	}
+
+	private Node pastedNode = null;
 	
 	/**
 	 * Creates an ImageCanvas using the given Image
@@ -113,6 +119,14 @@ public class ImageCanvas extends StackPane {
 		
 		
 		return color;
+	}
+
+	public void pasteSelectionOntoLayer( Node p_paste ) {
+
+		super.getChildren().remove( pastedNode );
+
+		pastedNode = p_paste;
+		super.getChildren().add( pastedNode );
 	}
 	
 	private void setDefaultCursor() {

@@ -206,6 +206,6 @@ public class LassoSelectorTool extends AbstractToolButton {
 			return isReal;
 		}
 		
-	};
+	}
 	
 }

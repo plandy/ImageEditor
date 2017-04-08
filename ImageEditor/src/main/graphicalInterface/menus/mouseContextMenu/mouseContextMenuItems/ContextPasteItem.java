@@ -8,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -51,9 +50,6 @@ public class ContextPasteItem extends MenuItem {
 		
 		private void paste( ImageCanvas p_imageCanvas, Image p_selection, ContextMenu p_menu, ActionEvent p_event ){
 			
-			double yOffset = calculateVerticalPasteOffset( p_menu );
-			double xOffset = calculateHorizontalPasteOffset( p_menu );
-			
 			Rectangle dragRect = new Rectangle( 20, 20, Color.WHITE );
 			Rectangle resizeRectNW = new Rectangle( 20,20, Color.BLUE );
 			Rectangle rotateRect = new Rectangle( 20,20,Color.HOTPINK );
@@ -76,15 +72,10 @@ public class ContextPasteItem extends MenuItem {
 			stackPane.setPrefSize( p_imageCanvas.getWidth(), p_imageCanvas.getHeight() );
 			stackPane.getChildren().addAll( imageRect, dragRect, resizeRectNW, rotateRect );
 			
-			p_imageCanvas.getChildren().add(stackPane);
-			
 			imageRect.setManaged(false);
 			dragRect.setManaged(false);
 			resizeRectNW.setManaged(false);
 			rotateRect.setManaged(false);
-			
-			imageRect.setX( p_menu.getX() );
-			imageRect.setY( p_menu.getY() - yOffset );
 			
 			dragRect.xProperty().bind( imageRect.xProperty().add(imageRect.widthProperty().divide(2)) );
 			dragRect.yProperty().bind( imageRect.yProperty().add(imageRect.heightProperty()) );
@@ -95,27 +86,25 @@ public class ContextPasteItem extends MenuItem {
 			rotateRect.xProperty().bind( imageRect.xProperty().add(imageRect.widthProperty()) );
 			rotateRect.yProperty().bind( imageRect.yProperty() );
 			
-			dragRect.setOnMouseDragged( new EventHandler<MouseEvent>()  {
-				@Override
-				public void handle(MouseEvent event) {
-					if ( mouseLocation.value != null ) {
-		                double deltaX = event.getSceneX() - mouseLocation.value.getX();
-		                double deltaY = event.getSceneY() - mouseLocation.value.getY();
-		                double newX = imageRect.getX() + deltaX ;
-		                double newMaxX = newX + imageRect.getWidth();
-		                if (newX >= dragRect.getWidth() 
-		                        && newMaxX <= imageRect.getParent().getBoundsInLocal().getWidth() - dragRect.getWidth() ) {
-		                	imageRect.setX(newX);
-		                }
-		                double newY = imageRect.getY() + deltaY ;
-		                double newMaxY = newY + imageRect.getHeight();
-		                if (newY >= dragRect.getHeight()  
-		                        && newMaxY <= imageRect.getParent().getBoundsInLocal().getHeight() - dragRect.getHeight() ) {
-		                	imageRect.setY(newY);
-		                }
-		                mouseLocation.value = new Point2D( event.getSceneX(), event.getSceneY() );
-		            }
+			dragRect.setOnMouseDragged( dragEvent -> {
+				if ( mouseLocation.value != null ) {
+					double deltaX = dragEvent.getSceneX() - mouseLocation.value.getX();
+					double deltaY = dragEvent.getSceneY() - mouseLocation.value.getY();
+					double newX = imageRect.getX() + deltaX;
+					double newMaxX = newX + imageRect.getWidth();
+					if (newX >= dragRect.getWidth()
+							&& newMaxX <= imageRect.getParent().getBoundsInLocal().getWidth() - dragRect.getWidth()) {
+						imageRect.setX(newX);
+					}
+					double newY = imageRect.getY() + deltaY;
+					double newMaxY = newY + imageRect.getHeight();
+					if (newY >= dragRect.getHeight()
+							&& newMaxY <= imageRect.getParent().getBoundsInLocal().getHeight() - dragRect.getHeight()) {
+						imageRect.setY(newY);
+					}
+					mouseLocation.value = new Point2D( dragEvent.getSceneX(), dragEvent.getSceneY() );
 				}
+
 	        });
 			
 			resizeRectNW.setOnMouseDragged(dragEvent -> {
@@ -151,7 +140,11 @@ public class ContextPasteItem extends MenuItem {
 	                mouseLocation.value = new Point2D(dragEvent.getSceneX(), dragEvent.getSceneY());
 	            }
 	        });
-			
+
+			imageRect.setX( p_imageCanvas.getWidth() / 2 );
+			imageRect.setY( p_imageCanvas.getHeight() / 2 );
+			//p_imageCanvas.getChildren().add(stackPane);
+			p_imageCanvas.pasteSelectionOntoLayer( stackPane );
 		}
 		
 		private void setUpDragging( Rectangle p_rect, Wrapper<Point2D> mouseLocation ) {
@@ -166,22 +159,6 @@ public class ContextPasteItem extends MenuItem {
 	            mouseLocation.value = null ;
 	        });
 	    }
-		
-		private double calculateVerticalPasteOffset( ContextMenu p_menu ) {
-			
-			double l_offset =  p_menu.getHeight() ;
-			
-			return l_offset;
-			
-		}
-		
-		private double calculateHorizontalPasteOffset( ContextMenu p_menu ) {
-			
-			double l_offset =  p_menu.getWidth() ;
-			
-			return l_offset;
-			
-		}
 		
 	}
 	
