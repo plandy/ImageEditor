@@ -40,9 +40,9 @@ public class ContextCopyItem extends MenuItem {
 			
 		}
 		
-		private void copy( Image p_selectionimage ) {
+		private void copy( Image p_selectionImage ) {
 			Clipboard clipboard = Clipboard.INSTANCE;
-			clipboard.storeToClipboard( p_selectionimage );
+			clipboard.storeToClipboard( p_selectionImage );
 		}
 		
 	}
