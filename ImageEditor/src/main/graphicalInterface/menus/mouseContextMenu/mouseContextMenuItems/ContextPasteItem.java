@@ -15,6 +15,10 @@ import javafx.scene.shape.Rectangle;
 import main.Clipboard;
 import main.graphicalInterface.image.ImageCanvas;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ContextPasteItem extends MenuItem {
 	
 	public ContextPasteItem() {
@@ -65,12 +69,13 @@ public class ContextPasteItem extends MenuItem {
 			setUpDragging(resizeRectNW, mouseLocation);
 			setUpDragging(rotateRect, mouseLocation);
 			
-			Pane stackPane = new Pane();
+			PasteHarness stackPane = new PasteHarness( imageRect );
+            stackPane.addAllToolThingies( dragRect, resizeRectNW, rotateRect );
 			
 			stackPane.setMinSize( p_imageCanvas.getWidth(), p_imageCanvas.getHeight() );
 			stackPane.setMaxSize( p_imageCanvas.getWidth(), p_imageCanvas.getHeight() );
 			stackPane.setPrefSize( p_imageCanvas.getWidth(), p_imageCanvas.getHeight() );
-			stackPane.getChildren().addAll( imageRect, dragRect, resizeRectNW, rotateRect );
+			//stackPane.getChildren().addAll( imageRect, dragRect, resizeRectNW, rotateRect );
 			
 			imageRect.setManaged(false);
 			dragRect.setManaged(false);
@@ -143,7 +148,7 @@ public class ContextPasteItem extends MenuItem {
 
 			imageRect.setX( p_imageCanvas.getWidth() / 2 );
 			imageRect.setY( p_imageCanvas.getHeight() / 2 );
-			//p_imageCanvas.getChildren().add(stackPane);
+
 			p_imageCanvas.pasteSelectionOntoLayer( stackPane );
 		}
 		
@@ -161,5 +166,37 @@ public class ContextPasteItem extends MenuItem {
 	    }
 		
 	}
+
+	public class PasteHarness extends Pane {
+
+	    private final Node image;
+	    private List<Node> toolThingies = new ArrayList<Node>();
+
+	    public PasteHarness( Node p_image ) {
+            image = p_image;
+
+            getChildren().add( image );
+        }
+
+        public void addToolThingy( Node p_node ) {
+            toolThingies.add( p_node );
+            getChildren().add( p_node );
+        }
+
+        public void addAllToolThingies( Node... p_nodes ) {
+	        List<Node> thingies = Arrays.asList(p_nodes);
+            toolThingies.addAll( thingies );
+            getChildren().addAll( thingies );
+        }
+
+	    public Node getImage() {
+            return image;
+        }
+
+        public void removeToolThingies() {
+            getChildren().removeAll( toolThingies );
+            toolThingies.clear();
+        }
+    }
 	
 }

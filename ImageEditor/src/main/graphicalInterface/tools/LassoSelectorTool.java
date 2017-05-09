@@ -80,7 +80,7 @@ public class LassoSelectorTool extends AbstractToolButton {
 		public void handle(MouseEvent event) {
 			
 			if ( MouseButton.PRIMARY.equals(event.getButton()) ) {
-				contextMenu.hide();
+				//contextMenu.hide();
 				
 				if ( MouseEvent.MOUSE_PRESSED.equals(event.getEventType()) ) {
 					

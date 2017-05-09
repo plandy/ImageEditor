@@ -4,9 +4,9 @@ import java.util.Random;
 
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
@@ -14,7 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import main.Clipboard;
+import main.graphicalInterface.menus.mouseContextMenu.MouseContextMenu;
 import main.graphicalInterface.menus.mouseContextMenu.mouseContextMenuItems.ContextPasteItem;
 
 public class ImageCanvas extends StackPane {
@@ -24,35 +24,21 @@ public class ImageCanvas extends StackPane {
 	
 	private Image selectionImage;
 
-	private ContextPasteItem contextPasteItem = new ContextPasteItem();
-	private ContextMenu contextMenu = new ContextMenu();
-	{
-		contextMenu.getItems().add( contextPasteItem );
-		this.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
+	private final MouseContextMenu contextMenu = new MouseContextMenu( this );
 
-			@Override
-			public void handle(MouseEvent event) {
-				
-				if ( MouseButton.SECONDARY.equals(event.getButton()) ) {
-					if ( MouseEvent.MOUSE_CLICKED.equals(event.getEventType()) ) {
-						Clipboard clipboard = Clipboard.INSTANCE;
-						Image clipboardImage = clipboard.loadFromClipboard();
-						if ( clipboardImage != null ) {
-							contextPasteItem.setVisible(true);
-						} else {
-							contextPasteItem.setVisible(false);
-						}
-						
-						contextMenu.show(ImageCanvas.this, event.getScreenX(), event.getScreenY());
-					}
-				}
+	EventHandler<MouseEvent>  basicMouseEventHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            if ( MouseButton.PRIMARY.equals(event.getButton()) ) {
+                contextMenu.hide();
+            }
+        }
+    };
+    {
+        addEventHandler( MouseEvent.ANY, basicMouseEventHandler );
+    }
 
-			}
-			
-		});
-	}
-
-	private Node pastedNode = null;
+	private ContextPasteItem.PasteHarness pastedNode = null;
 	
 	/**
 	 * Creates an ImageCanvas using the given Image
@@ -121,12 +107,26 @@ public class ImageCanvas extends StackPane {
 		return color;
 	}
 
-	public void pasteSelectionOntoLayer( Node p_paste ) {
+	public void pasteSelectionOntoLayer( ContextPasteItem.PasteHarness p_paste ) {
 
 		super.getChildren().remove( pastedNode );
 
 		pastedNode = p_paste;
 		super.getChildren().add( pastedNode );
+	}
+
+	public ContextPasteItem.PasteHarness getPastedNode() {
+		return pastedNode;
+	}
+
+	public void affixSelectionToLayer() {
+        pastedNode.removeToolThingies();
+		Image layerSnapshot = this.snapshotCanvas();
+		gc.drawImage( layerSnapshot, 0, 0 );
+
+        super.getChildren().remove( pastedNode );
+
+		pastedNode = null;
 	}
 	
 	private void setDefaultCursor() {
@@ -142,7 +142,10 @@ public class ImageCanvas extends StackPane {
 	}
 	
 	public Image snapshotCanvas() {
-		return super.snapshot( null, null );
+		SnapshotParameters parameters = new SnapshotParameters();
+		parameters.setFill(Color.TRANSPARENT);
+
+		return super.snapshot( parameters, null );
 	}
 	
 	public void setSelectionImage( Image p_newSelection ) {
