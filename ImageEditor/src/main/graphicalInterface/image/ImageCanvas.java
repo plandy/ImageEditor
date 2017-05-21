@@ -3,11 +3,13 @@ package main.graphicalInterface.image;
 import java.util.Random;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -18,6 +20,8 @@ import main.graphicalInterface.menus.mouseContextMenu.MouseContextMenu;
 import main.graphicalInterface.menus.mouseContextMenu.mouseContextMenuItems.ContextPasteItem;
 
 public class ImageCanvas extends StackPane {
+
+	private final ImageTab parentTab;
 	
 	private final Canvas canvas;
 	private final GraphicsContext gc;
@@ -25,6 +29,8 @@ public class ImageCanvas extends StackPane {
 	private Image selectionImage;
 
 	private final MouseContextMenu contextMenu = new MouseContextMenu( this );
+
+	private ImagePasteHarness pastedNode = null;
 
 	EventHandler<MouseEvent>  basicMouseEventHandler = new EventHandler<MouseEvent>() {
         @Override
@@ -37,15 +43,13 @@ public class ImageCanvas extends StackPane {
     {
         addEventHandler( MouseEvent.ANY, basicMouseEventHandler );
     }
-
-	private ContextPasteItem.PasteHarness pastedNode = null;
 	
 	/**
 	 * Creates an ImageCanvas using the given Image
 	 */
-	public ImageCanvas( Image p_image ) {
+	public ImageCanvas( Image p_image, ImageTab p_parentTab ) {
 		//super( p_image.getWidth(), p_image.getHeight() );
-		
+		parentTab = p_parentTab;
 		canvas = new Canvas( p_image.getWidth(), p_image.getHeight() );
 		super.getChildren().add( canvas );
 		gc = canvas.getGraphicsContext2D();
@@ -62,8 +66,9 @@ public class ImageCanvas extends StackPane {
 	 * Creates a blank ImageCanvas with the given width and height. Pixels will
 	 * initially be transparent.
 	 */
-	public ImageCanvas( double p_width, double p_height ) {
+	public ImageCanvas( double p_width, double p_height, ImageTab p_parentTab ) {
 		//super( p_width, p_height );
+		parentTab = p_parentTab;
 		canvas = new Canvas( p_width, p_height );
 		super.getChildren().add( canvas );
 		gc = canvas.getGraphicsContext2D();
@@ -107,7 +112,7 @@ public class ImageCanvas extends StackPane {
 		return color;
 	}
 
-	public void pasteSelectionOntoLayer( ContextPasteItem.PasteHarness p_paste ) {
+	public void pasteSelectionOntoLayer( ImagePasteHarness p_paste ) {
 
 		super.getChildren().remove( pastedNode );
 
@@ -115,7 +120,43 @@ public class ImageCanvas extends StackPane {
 		super.getChildren().add( pastedNode );
 	}
 
-	public ContextPasteItem.PasteHarness getPastedNode() {
+	public ImageTab getParentImageTab() {
+		return parentTab;
+	}
+
+//	public Image getPastedImageAsLayer() {
+//
+//		Image image = null;
+//
+//		if ( pastedNode != null ) {
+//			Bounds bounds = pastedNode.getBoundsInParent();
+//
+//			ImageCanvas layer = new ImageCanvas( this.canvas.getWidth(), this.canvas.getHeight() );
+//			Canvas canvas = new Canvas( this.canvas.getWidth(), this.canvas.getHeight());
+//			SnapshotParameters parameters = new SnapshotParameters();
+//			parameters.setFill(Color.TRANSPARENT);
+//
+//			//pastedNode.removeToolThingies();
+//			Image pastedImage = pastedNode.snapshot( parameters,null );
+//
+//			ImageView imageView = new ImageView( pastedImage );
+//			layer.getChildren().add( imageView );
+//			//imageView.setLayoutX( bounds.getMaxX() );
+//			//imageView.setLayoutY( bounds.getMaxY() );
+//
+//			image = layer.snapshotCanvas();
+//
+//			canvas.getGraphicsContext2D().drawImage( image, 0, 0 );
+//			this.canvas = canvas;
+//
+//			//gc.drawImage( image, 0, 0 );
+//
+//		}
+//
+//		return image;
+//	}
+
+	public ImagePasteHarness getPastedNode() {
 		return pastedNode;
 	}
 

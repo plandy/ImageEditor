@@ -44,7 +44,7 @@ public class ImageTab extends Tab {
 	}
 	
 	private void addImageLayer( Image p_image ) {
-		ImageCanvas imageLayerCanvas = new ImageCanvas( p_image );
+		ImageCanvas imageLayerCanvas = new ImageCanvas( p_image, this );
 		imageLayers.add( imageLayerCanvas );
 		imageLayerGroup.getChildren().add( imageLayerCanvas );
 		addLayerToViewer( imageLayerCanvas );
@@ -131,7 +131,7 @@ public class ImageTab extends Tab {
 	 */
 	public ImageCanvas addFakeCanvas() {
 		
-		ImageCanvas fakeCanvas = new ImageCanvas( imageCanvasWidth, imageCanvasHeight );
+		ImageCanvas fakeCanvas = new ImageCanvas( imageCanvasWidth, imageCanvasHeight, this );
 		
 		imageLayerGroup.getChildren().add( fakeCanvas );
 		
@@ -145,5 +145,9 @@ public class ImageTab extends Tab {
 			throw new RuntimeException();
 		}
 	}
-	
+
+	public ImageCanvas getBaseLayer() {
+		return (ImageCanvas)imageLayerGroup.getChildren().get(0);
+	}
+
 }

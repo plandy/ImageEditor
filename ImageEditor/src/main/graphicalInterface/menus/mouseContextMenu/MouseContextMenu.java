@@ -8,18 +8,21 @@ import javafx.scene.input.MouseEvent;
 import main.Clipboard;
 import main.graphicalInterface.image.ImageCanvas;
 import main.graphicalInterface.menus.mouseContextMenu.mouseContextMenuItems.ContextAffixPastedSelectionItem;
+import main.graphicalInterface.menus.mouseContextMenu.mouseContextMenuItems.ContextBlendLayerItem;
 import main.graphicalInterface.menus.mouseContextMenu.mouseContextMenuItems.ContextPasteItem;
 
 public class MouseContextMenu extends ContextMenu {
 
-	private ContextPasteItem contextPasteItem = new ContextPasteItem();
-	private ContextAffixPastedSelectionItem contextAffixPastedSelectionItem = new ContextAffixPastedSelectionItem();
+	private final ContextPasteItem contextPasteItem = new ContextPasteItem();
+	private final ContextAffixPastedSelectionItem contextAffixPastedSelectionItem = new ContextAffixPastedSelectionItem();
+	private final ContextBlendLayerItem contextBlendLayerItem  = new ContextBlendLayerItem();
 	
 	public MouseContextMenu( ImageCanvas p_canvas ) {
 		super();
 
 		super.getItems().add( contextPasteItem );
 		super.getItems().add( contextAffixPastedSelectionItem );
+		super.getItems().add( contextBlendLayerItem );
 
 		p_canvas.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
 

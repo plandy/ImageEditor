@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.applicationConstants.StringConstants;
+import main.graphicalInterface.image.ImageTab;
 import main.graphicalInterface.image.ImageTabPane;
 import main.utility.SystemInformationUtility;
 
@@ -38,10 +39,14 @@ public class MainWindow extends Stage {
 	private void initializeWindowDimensions() {
 		
 		//set window to the size of the currently focused monitor
-		int l_screenWidth = SystemInformationUtility.getScreenWidth();
-		int l_screenHeight = SystemInformationUtility.getScreenHeight();
-		super.setWidth( l_screenWidth );
-		super.setHeight( l_screenHeight );
+		int screenWidth = SystemInformationUtility.getScreenWidth();
+		int screenHeight = SystemInformationUtility.getScreenHeight();
+		super.setWidth( screenWidth );
+		super.setHeight( screenHeight );
+	}
+
+	public ImageTab getSelectedImageTab() {
+		return imageTabPane.getFocusedTab();
 	}
 	
 }
